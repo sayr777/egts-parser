@@ -1,0 +1,23 @@
+# EGTS Sample: LBS_CELL_INFO
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, TELEDATA_SERVICE — GPS + LBS + WiFi.
+# Подзаписи: SR_POS_DATA, SR_CELL_INFO×2 (обслуживающая+соседняя LTE сота),
+# SR_WIFI_AP_DATA (SSID=MoskovskayaSB, BSSID=AA:BB:CC:DD:EE:FF).
+# MCC=250 (Россия), MNC=20 (Tele2), LTE.
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_CELL_INFO, SR_WIFI_AP_DATA
+# Total bytes : 97
+# Source      : synthetic
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 54 00 02  00 01 0B 4D  00 02 00 00
+02 02 10 15  00 28 CE 67  1A 13 11 9C  9E 47 AD 7F
+35 13 7C 01  2F 00 00 00  00 00 CA 0B  00 FA 00 14
+2B 1A 01 3C  1A 00 35 03  CA 0B 00 FA  00 14 2B 1A
+02 3C 1A 00  2B 03 CB 16  00 AA BB CC  DD EE FF 3C
+06 0D 4D 6F  73 6B 6F 76  73 6B 61 79  61 53 42 B2
+31

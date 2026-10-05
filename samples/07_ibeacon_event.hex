@@ -1,0 +1,21 @@
+# EGTS Sample: IBEACON_EVENT
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, TELEDATA_SERVICE — GPS-пакет с BLE iBeacon-событиями.
+# Подзаписи: SR_POS_DATA (v=38 км/ч), SR_IBEACON_EVENT×2 (вход+обновление).
+# Москва, остановка #42 и #43, UUID 550e8400-e29b-41d4-a716-446655440000.
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_IBEACON_EVENT
+# Total bytes : 96
+# Source      : synthetic
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 53 00 01  00 01 9A 4C  00 01 00 00
+02 02 10 15  00 28 CE 67  1A 13 11 9C  9E 47 AD 7F
+35 13 7C 01  2F 00 00 00  00 00 C9 17  00 01 0A 00
+2A 00 3F 45  55 0E 84 00  E2 9B 41 D4  A7 16 44 66
+55 44 00 00  C9 17 00 03  0B 00 2B 00  38 45 55 0E
+84 00 E2 9B  41 D4 A7 16  44 66 55 44  00 00 E8 F2

@@ -1,0 +1,19 @@
+# EGTS Sample: RADIOTAG_EVENT
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, TELEDATA_SERVICE — GPS + событие пассивной радиометки.
+# Подзаписи: SR_POS_DATA, SR_RADIOTAG_EVENT (EVTYPE=enter, TAGTYPE=passive,
+# UID=DEADBEEF, RSSI=-68 dBm).
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_RADIOTAG_EVENT
+# Total bytes : 55
+# Source      : synthetic
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 2A 00 03  00 01 BE 23  00 03 00 00
+02 02 10 15  00 28 CE 67  1A 13 11 9C  9E 47 AD 7F
+35 13 7C 01  2F 00 00 00  00 00 C8 08  00 01 01 04
+DE AD BE EF  44 21 BF

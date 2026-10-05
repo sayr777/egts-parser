@@ -49,6 +49,9 @@ python egts_cli.py samples/03_appdata_pos_telemetry.hex output.csv
 | `04_appdata_with_egtsplus.hex` | PT_APPDATA / TELEDATA | 217 | SR_POS_DATA, SR_AD_SENSORS_DATA, SR_COUNTERS_DATA, SR_STATE_DATA, SR_EGTSPLUS_DATA |
 | `05_appdata_two_sdrs.hex` | PT_APPDATA / TELEDATA | 363 | 2 × SDR с полной телематикой |
 | `06_auth_with_sensors.hex` | PT_APPDATA / AUTH | 148 | SR_TERM_IDENTITY, SR_COUNTERS_DATA, SR_ABS_AN_SENS_DATA |
+| `07_ibeacon_event.hex` | PT_APPDATA / TELEDATA | 96 | SR_POS_DATA, SR_IBEACON_EVENT × 2 (вход + периодика) |
+| `08_lbs_cell_info.hex` | PT_APPDATA / TELEDATA | 97 | SR_POS_DATA, SR_CELL_INFO × 2 (LTE), SR_WIFI_AP_DATA |
+| `09_radiotag_event.hex` | PT_APPDATA / TELEDATA | 55 | SR_POS_DATA, SR_RADIOTAG_EVENT (пассивная метка RFID) |
 
 ## Добавление нового пакета
 

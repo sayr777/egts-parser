@@ -32,6 +32,10 @@ SR_ABS_CNTR_DATA      = 25
 SR_ABS_LOOPIN_DATA    = 26
 SR_LIQUID_LEVEL       = 27
 SR_PASSENGERS         = 28
+SR_RADIOTAG_EVENT     = 200
+SR_IBEACON_EVENT      = 201
+SR_CELL_INFO          = 202
+SR_WIFI_AP_DATA       = 203
 
 SR_NAMES = {
     0: "SR_RECORD_RESPONSE", 1: "SR_TERM_IDENTITY", 2: "SR_MODULE_DATA",
@@ -41,6 +45,8 @@ SR_NAMES = {
     21: "SR_STATE_DATA", 22: "SR_LOOPIN_DATA", 23: "SR_ABS_DIG_SENS",
     24: "SR_ABS_AN_SENS", 25: "SR_ABS_CNTR_DATA", 26: "SR_ABS_LOOPIN",
     27: "SR_LIQUID_LEVEL", 28: "SR_PASSENGERS",
+    200: "SR_RADIOTAG_EVENT", 201: "SR_IBEACON_EVENT",
+    202: "SR_CELL_INFO", 203: "SR_WIFI_AP_DATA",
 }
 
 SERVICE_NAMES = {1: "AUTH", 2: "TELEDATA"}
@@ -370,6 +376,102 @@ def _decode_dispatcher_identity(data: bytes, base: int, layer: str) -> List[Fiel
     return rows
 
 
+_EVTYPE_NAMES = {1: "enter", 2: "exit", 3: "periodic"}
+_RAT_NAMES    = {1: "GSM", 2: "UMTS", 3: "LTE", 4: "NR"}
+_TAGTYPE_NAMES = {1: "passive", 2: "active"}
+
+
+def _decode_ibeacon_event(data: bytes, base: int, layer: str) -> List[FieldRow]:
+    rows = []
+    if len(data) < 23:
+        return [FieldRow(layer, "RAW", base, len(data), _hex(data), data, "(too short)", False)]
+    evtype = data[0]
+    rows.append(FieldRow(layer, "EVTYPE", base,   1, _hex(data[0:1]), evtype,
+        _EVTYPE_NAMES.get(evtype, str(evtype)), True))
+    major = struct.unpack_from("<H", data, 1)[0]
+    rows.append(FieldRow(layer, "MAJOR", base+1,  2, _hex(data[1:3]), major, str(major), True))
+    minor = struct.unpack_from("<H", data, 3)[0]
+    rows.append(FieldRow(layer, "MINOR", base+3,  2, _hex(data[3:5]), minor, str(minor), True))
+    rssi = data[5] - 128
+    rows.append(FieldRow(layer, "RSSI",  base+5,  1, _hex(data[5:6]), data[5], f"{rssi} dBm", True))
+    txpwr = data[6] - 128
+    rows.append(FieldRow(layer, "TXPWR", base+6,  1, _hex(data[6:7]), data[6], f"{txpwr} dBm", True))
+    uuid_hex = data[7:23].hex().upper()
+    uuid_str = (f"{uuid_hex[0:8]}-{uuid_hex[8:12]}-{uuid_hex[12:16]}"
+                f"-{uuid_hex[16:20]}-{uuid_hex[20:32]}")
+    rows.append(FieldRow(layer, "UUID",  base+7, 16, _hex(data[7:23]), uuid_hex, uuid_str, True))
+    return rows
+
+
+def _decode_radiotag_event(data: bytes, base: int, layer: str) -> List[FieldRow]:
+    rows = []
+    if len(data) < 4:
+        return [FieldRow(layer, "RAW", base, len(data), _hex(data), data, "(too short)", False)]
+    evtype = data[0]
+    rows.append(FieldRow(layer, "EVTYPE",  base,   1, _hex(data[0:1]), evtype,
+        _EVTYPE_NAMES.get(evtype, str(evtype)), True))
+    tagtype = data[1]
+    rows.append(FieldRow(layer, "TAGTYPE", base+1, 1, _hex(data[1:2]), tagtype,
+        _TAGTYPE_NAMES.get(tagtype, str(tagtype)), True))
+    uidlen = data[2]
+    rows.append(FieldRow(layer, "UIDLEN",  base+2, 1, _hex(data[2:3]), uidlen, str(uidlen), False))
+    uid = data[3:3+uidlen]
+    rows.append(FieldRow(layer, "UID",     base+3, uidlen, _hex(uid), uid.hex().upper(),
+        uid.hex().upper(), True))
+    if len(data) >= 3 + uidlen + 1:
+        rssi = data[3+uidlen] - 128
+        rows.append(FieldRow(layer, "RSSI", base+3+uidlen, 1,
+            _hex(data[3+uidlen:4+uidlen]), data[3+uidlen], f"{rssi} dBm", True))
+    return rows
+
+
+def _decode_cell_info(data: bytes, base: int, layer: str) -> List[FieldRow]:
+    rows = []
+    if len(data) < 11:
+        return [FieldRow(layer, "RAW", base, len(data), _hex(data), data, "(too short)", False)]
+    mcc = struct.unpack_from("<H", data, 0)[0]
+    rows.append(FieldRow(layer, "MCC",    base,    2, _hex(data[0:2]), mcc, str(mcc), True))
+    mnc = data[2]
+    rows.append(FieldRow(layer, "MNC",    base+2,  1, _hex(data[2:3]), mnc, str(mnc), True))
+    lac = struct.unpack_from("<H", data, 3)[0]
+    rows.append(FieldRow(layer, "LAC",    base+3,  2, _hex(data[3:5]), lac, f"0x{lac:04X}", True))
+    cell_id = struct.unpack_from("<I", data, 5)[0]
+    rows.append(FieldRow(layer, "CellID", base+5,  4, _hex(data[5:9]), cell_id,
+        f"0x{cell_id:08X}", True))
+    rssi = data[9] - 128
+    rows.append(FieldRow(layer, "RSSI",   base+9,  1, _hex(data[9:10]), data[9],
+        f"{rssi} dBm", True))
+    rat = data[10]
+    rows.append(FieldRow(layer, "RAT",    base+10, 1, _hex(data[10:11]), rat,
+        _RAT_NAMES.get(rat, str(rat)), True))
+    return rows
+
+
+def _decode_wifi_ap_data(data: bytes, base: int, layer: str) -> List[FieldRow]:
+    rows = []
+    if len(data) < 9:
+        return [FieldRow(layer, "RAW", base, len(data), _hex(data), data, "(too short)", False)]
+    bssid = data[0:6]
+    bssid_str = ":".join(f"{b:02X}" for b in bssid)
+    rows.append(FieldRow(layer, "BSSID",   base,   6, _hex(bssid), bssid.hex().upper(),
+        bssid_str, True))
+    rssi = data[6] - 128
+    rows.append(FieldRow(layer, "RSSI",    base+6, 1, _hex(data[6:7]), data[6],
+        f"{rssi} dBm", True))
+    channel = data[7]
+    rows.append(FieldRow(layer, "CHANNEL", base+7, 1, _hex(data[7:8]), channel,
+        str(channel) if channel else "N/A", True))
+    ssidlen = data[8]
+    rows.append(FieldRow(layer, "SSIDLEN", base+8, 1, _hex(data[8:9]), ssidlen,
+        str(ssidlen), False))
+    if ssidlen and len(data) >= 9 + ssidlen:
+        ssid_bytes = data[9:9+ssidlen]
+        ssid_str = ssid_bytes.decode("utf-8", errors="replace")
+        rows.append(FieldRow(layer, "SSID",  base+9, ssidlen, _hex(ssid_bytes),
+            ssid_str, ssid_str, True))
+    return rows
+
+
 def _decode_subrecord_raw(data: bytes, base: int, layer: str) -> List[FieldRow]:
     return [FieldRow(layer, "RAW", base, len(data), _hex(data), data.hex().upper(), "(not decoded)", False)]
 
@@ -485,6 +587,14 @@ def _decode_service_data_set(data: bytes, base: int) -> List[FieldRow]:
                 rows += _decode_abs_cntr(sr_data, off, sr_layer)
             elif srt == SR_DISPATCHER_IDENTITY:
                 rows += _decode_dispatcher_identity(sr_data, off, sr_layer)
+            elif srt == SR_IBEACON_EVENT:
+                rows += _decode_ibeacon_event(sr_data, off, sr_layer)
+            elif srt == SR_RADIOTAG_EVENT:
+                rows += _decode_radiotag_event(sr_data, off, sr_layer)
+            elif srt == SR_CELL_INFO:
+                rows += _decode_cell_info(sr_data, off, sr_layer)
+            elif srt == SR_WIFI_AP_DATA:
+                rows += _decode_wifi_ap_data(sr_data, off, sr_layer)
             else:
                 rows += _decode_subrecord_raw(sr_data, off, sr_layer)
 
