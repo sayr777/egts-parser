@@ -1,0 +1,20 @@
+# EGTS Sample: TERM_IDENTITY
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, AUTH_SERVICE — запрос авторизации терминала.
+# Содержит SR_TERM_IDENTITY (TID, флаги) + дополнительные данные.
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_EXT_POS_DATA, SR_LIQUID_LEVEL
+# Total bytes : 85
+# Source      : egts_packages.csv:21
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 48 00 C0  AD 01 42 39  00 14 34 85
+86 05 00 00  4F 5F E5 10  02 02 10 15  00 0F 5E E5
+10 20 18 1B  9E B4 DF DA  34 19 20 82  5F 00 00 00
+00 01 11 0A  00 1F 07 00  06 00 00 00  13 03 00 1B
+07 00 01 08  00 C3 06 00  00 1B 07 00  02 09 00 03
+00 00 00 D8  2A

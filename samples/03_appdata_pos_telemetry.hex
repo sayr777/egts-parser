@@ -1,0 +1,28 @@
+# EGTS Sample: APPDATA_TELEMETRY
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, TELEDATA_SERVICE — полная телематика с одним SDR.
+# Подзаписи: SR_POS_DATA (GPS), SR_EXT_POS_DATA (DOP/спутники),
+# SR_AD_SENSORS_DATA (цифр./аналог. входы), SR_COUNTERS_DATA,
+# SR_STATE_DATA (напряжения).
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_EXT_POS_DATA, SR_AD_SENSORS_DATA, SR_STATE/ACCEL, SR_LIQUID_LEVEL, SR_ABS_CNTR_DATA
+# Total bytes : 190
+# Source      : egts_packages.csv:2
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 B1 00 E8  04 01 4E A6  00 A1 0A 81
+34 F6 E9 01  02 02 10 1A  00 4F 5F E5  10 00 BE CD
+9E 80 7F 8B  35 93 9B 80  2F F9 80 02  01 00 92 00
+00 00 00 11  06 00 0E 46  00 00 00 0C  12 1C 00 01
+0F FF 01 44  6D 00 B8 00  00 0B 01 00  00 00 00 00
+00 00 00 00  00 00 00 00  00 00 00 14  05 00 02 FF
+00 29 04 1B  07 00 00 FF  00 00 00 00  00 1B 07 00
+02 00 00 00  00 00 00 1B  07 00 03 01  00 5A 08 00
+00 1B 07 00  04 02 00 00  00 00 00 19  04 00 64 77
+2A 04 19 04  00 65 00 00  00 19 04 00  66 01 00 00
+19 04 00 67  77 2A 04 19  04 00 68 77  2A 04 19 04
+00 69 4F 9A  22 19 04 00  6E 77 2A 04  41 F6

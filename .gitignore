@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Generated Excel workbook (rebuild with: python excel/create_workbook.py)
+EGTS_Analyzer.xlsx
+
+# Temp files from VBA macro
+egts_input.txt
+egts_output.csv

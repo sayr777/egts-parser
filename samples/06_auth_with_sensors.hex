@@ -1,0 +1,25 @@
+# EGTS Sample: AUTH_WITH_SENSORS
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, AUTH_SERVICE — авторизация со счётчиками и ABS-сенсорами.
+# Подзаписи: SR_TERM_IDENTITY, SR_COUNTERS_DATA (ABS),
+# SR_ABS_AN_SENS_DATA, SR_ABS_CNTR_DATA.
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_ABS_CNTR_DATA, SR_EXT_POS_DATA, SR_LIQUID_LEVEL
+# Total bytes : 148
+# Source      : egts_packages.csv:24
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 87 00 DB  92 01 42 78  00 65 C2 85
+00 0D 00 00  4F 5F E5 10  02 02 10 15  00 4E 5F E5
+10 E6 5F 6B  9E 77 30 B2  35 19 ED 80  05 00 00 00
+00 01 19 04  00 6E 8A 06  67 19 04 00  6F 00 00 00
+19 04 00 64  92 07 67 19  04 00 65 00  00 00 19 04
+00 66 44 5C  00 19 04 00  67 8A 06 67  19 04 00 68
+9D 17 65 19  04 00 69 1D  45 15 19 04  00 6A 1D 45
+15 11 0A 00  1F 08 00 07  00 00 00 0F  03 00 1B 07
+00 01 08 00  0B 06 00 00  1B 07 00 02  09 00 03 00
+00 00 B2 1A

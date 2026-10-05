@@ -1,0 +1,15 @@
+# EGTS Sample: PT_RESPONSE
+# ────────────────────────────────────────────────────────────────────
+# Минимальный пакет PT_RESPONSE — подтверждение авторизации терминала.
+# Нет тела SFRD; CRC заголовка = 4A; SFRCS = E833.
+#
+# Packet type : PT_RESPONSE
+# SDR count   : 0
+# Services    : —
+# Subrecords  : —
+# Total bytes : 16
+# Source      : README example
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 03 0B  00 03 00 89  00 00 4A 15  38 00 33 E8

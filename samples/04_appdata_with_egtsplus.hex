@@ -1,0 +1,30 @@
+# EGTS Sample: APPDATA_EGTSPLUS
+# ────────────────────────────────────────────────────────────────────
+# PT_APPDATA, TELEDATA_SERVICE — телематика + расширенные данные.
+# Подзаписи: SR_POS_DATA, SR_AD_SENSORS_DATA, SR_COUNTERS_DATA,
+# SR_STATE_DATA, SR_EGTSPLUS_DATA (тип 15, protobuf).
+# ПРИМЕЧАНИЕ: SR_EGTSPLUS_DATA отображается как RAW — protobuf не декодируется.
+#
+# Packet type : PT_APPDATA
+# SDR count   : 1
+# Services    : TELEDATA
+# Subrecords  : SR_POS_DATA, SR_EXT_POS_DATA, SR_AD_SENSORS_DATA, SR_STATE/ACCEL, SR_LIQUID_LEVEL, SR_ABS_CNTR_DATA, SR_EGTSPLUS_DATA
+# Total bytes : 217
+# Source      : egts_packages.csv:6
+# ────────────────────────────────────────────────────────────────────
+# Paste into EGTS_Analyzer.xlsx cell B2, then run ParsePacket (Alt-F8)
+#
+01 00 00 0B  00 CC 00 16  00 01 77 C1  00 3C 00 81
+11 08 D1 01  02 02 10 1A  00 4E 5F E5  10 00 BE C5
+9E 40 2F A0  35 93 55 80  4F 92 3C 00  01 00 A7 00
+00 00 00 11  06 00 0E 64  00 00 00 0C  12 1C 00 01
+0F FF 01 26  34 00 00 00  00 00 00 00  00 00 00 00
+00 00 00 00  00 00 00 00  00 00 00 14  05 00 02 87
+00 29 04 1B  07 00 00 FF  00 00 00 00  00 1B 07 00
+02 00 00 00  00 00 00 1B  07 00 03 01  00 34 03 00
+00 1B 07 00  04 02 00 00  00 00 00 19  04 00 64 6C
+62 01 19 04  00 65 00 00  00 19 04 00  66 01 00 00
+19 04 00 67  6C 62 01 19  04 00 68 6C  62 01 19 04
+00 69 4E 9A  22 19 04 00  6E 6C 62 01  0F 18 00 08
+EC C4 05 15  4E 9A 22 5C  25 00 00 00  00 82 01 02
+08 01 8A 01  02 08 01 76  A6
