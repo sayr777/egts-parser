@@ -44,14 +44,19 @@ python excel/create_workbook.py
 
 Создаёт `EGTS_Analyzer.xlsx` и `EGTSAnalyzer.bas` в корне проекта.
 
-### 3. Настройка Excel
+### 3. Настройка Excel (автоматически)
 
-1. Открыть `EGTS_Analyzer.xlsx`
-2. Сохранить как **`.xlsm`** (Файл → Сохранить как → тип «Книга Excel с поддержкой макросов»)
-3. Открыть редактор VBA: **Alt+F11**
-4. В панели **Project Explorer** (слева) найти строку с именем книги, щёлкнуть по ней **правой кнопкой мыши** → **Import File...** → выбрать `EGTSAnalyzer.bas`
-   > Если панель Project Explorer не видна — включить её через **View → Project Explorer** (Ctrl+R)
-5. Закрыть редактор VBA и сохранить книгу (**Ctrl+S**)
+```bash
+pip install pywin32
+python setup_xlsm.py
+```
+
+Скрипт генерирует `EGTS_Analyzer.xlsm` с уже встроенным VBA — открывать редактор не нужно.
+
+> **Если появляется ошибка «Programmatic access to VBA is not trusted»:**
+> Excel → Файл → Параметры → Центр управления безопасностью → Параметры центра управления безопасностью
+> → Параметры макросов → поставить галку **«Доверять доступу к объектной модели проектов VBA»**
+> → ОК, затем повторить `python setup_xlsm.py`
 
 ### 4. Использование
 
