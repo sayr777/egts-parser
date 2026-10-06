@@ -1,99 +1,118 @@
 # EGTS Analyzer
 
-Двунаправленный анализатор пакетов протокола **EGTS** (ERA-GLONASS Telematics System, ГОСТ Р 54619-2011) в Excel.
+Инструмент для разбора и сборки пакетов протокола **EGTS** (ГОСТ Р 54619-2011) прямо в Excel.
 
-- **Декодирование**: вставьте hex-строку пакета → получите таблицу всех полей с расшифровкой
-- **Кодирование**: измените значение поля → пересоберите hex-пакет с пересчётом CRC
-
----
-
-## Структура проекта
-
-```
-egts-parser/
-├── egts/                        # Python-пакет парсера
-│   ├── __init__.py              # Экспортирует parse_hex, encode_packet, FieldRow
-│   ├── parser.py                # Парсер/энкодер всех уровней EGTS
-│   └── cli.py                   # CLI-логика (вызывается VBA через Shell)
-├── excel/
-│   └── create_workbook.py       # Генератор Excel-книги
-├── docs/
-│   ├── TZ_EGTS_iBeacon_extended_additive_v17.docx
-│   └── TZ_EGTS_RTLS_v2.docx
-├── egts_cli.py                  # Корневая точка входа для VBA
-├── EGTSAnalyzer.bas             # VBA-модуль (импортируется в .xlsm)
-├── EGTS_Analyzer.xlsx           # Готовая книга (генерируется)
-└── requirements.txt
-```
+- Вставляете hex-строку пакета → получаете таблицу всех полей с расшифровкой
+- Меняете значение поля → пересобираете пакет с пересчётом CRC
 
 ---
 
-## Быстрый старт
+## Установка и запуск
 
-### 1. Установка зависимостей
-
-```bash
-pip install openpyxl
-```
-
-### 2. Генерация Excel-книги
+**Требования:** Python 3.9+, Microsoft Excel (Windows)
 
 ```bash
-python excel/create_workbook.py
-```
+# 1. Установить зависимости
+pip install openpyxl pywin32
 
-Создаёт `EGTS_Analyzer.xlsx` и `EGTSAnalyzer.bas` в корне проекта.
-
-### 3. Настройка Excel (автоматически)
-
-```bash
-pip install pywin32
+# 2. Сгенерировать EGTS_Analyzer.xlsm с готовыми макросами
 python setup_xlsm.py
 ```
 
-Скрипт генерирует `EGTS_Analyzer.xlsm` с уже встроенным VBA — открывать редактор не нужно.
+Откройте появившийся `EGTS_Analyzer.xlsm` — макросы уже встроены, ничего настраивать не нужно.
 
-> **Если появляется ошибка «Programmatic access to VBA is not trusted»:**
+> **Ошибка «Programmatic access to VBA is not trusted»?**
 > Excel → Файл → Параметры → Центр управления безопасностью → Параметры центра управления безопасностью
-> → Параметры макросов → поставить галку **«Доверять доступу к объектной модели проектов VBA»**
-> → ОК, затем повторить `python setup_xlsm.py`
+> → Параметры макросов → галка **«Доверять доступу к объектной модели проектов VBA»** → ОК
+> Затем повторите `python setup_xlsm.py`
 
-### 4. Использование
+---
 
-| Действие | Как |
-|----------|-----|
-| Разобрать пакет | Вставить hex в ячейку B2 листа **Analyzer** → `Alt-F8` → `ParsePacket` → Run |
-| Пересобрать пакет | Изменить синие ячейки колонки **Decoded** → `Alt-F8` → `BuildPacket` → Run |
-| Готовые примеры | Листы `AUTH_RESPONSE`, `APPDATA_POS`, `APPDATA_EGTSPLUS`, `APPDATA_STATE`, `TERM_IDENTITY` |
+## Использование в Excel
+
+Рабочий лист **Analyzer**:
+
+| Задача | Действие |
+|--------|----------|
+| Разобрать пакет | Вставить hex в ячейку **B2** → `Alt+F8` → `ParsePacket` → **Run** |
+| Изменить поле и пересобрать | Отредактировать синюю ячейку в колонке **Decoded** → `Alt+F8` → `BuildPacket` → **Run** |
+
+Листы с примерами пакетов: `AUTH_RESPONSE`, `APPDATA_POS`, `APPDATA_STATE`, `TERM_IDENTITY`, `APPDATA_EGTSPLUS`.
+
+---
+
+## Поддерживаемые подзаписи
+
+| Код | Подзапись | Ключевые поля |
+|-----|-----------|---------------|
+| 0 | SR_RECORD_RESPONSE | CRN, RST |
+| 1 | SR_TERM_IDENTITY | TID, IMEI, IMSI, HDID |
+| 5 | SR_DISPATCHER_IDENTITY | DT, DID |
+| 9 | SR_RESULT_CODE | RCD |
+| 16 | SR_POS_DATA | Время, LAT, LON, скорость, курс, пробег, высота |
+| 17 | SR_EXT_POS_DATA | VDOP, HDOP, PDOP, кол-во спутников |
+| 18 | SR_AD_SENSORS_DATA | Цифровые входы/выходы, АЦП ×8 |
+| 19 | SR_COUNTERS_DATA | Счётчики ×8 |
+| 20/21 | SR_STATE_DATA | Состояние, напряжение АКБ/бортсети |
+| 24 | SR_ABS_AN_SENS_DATA | Абсолютный аналоговый датчик |
+| 25 | SR_ABS_CNTR_DATA | Абсолютный счётчик |
+| 27 | SR_LIQUID_LEVEL | Уровень жидкости |
+| 200 | SR_RADIOTAG_EVENT | RFID-метка (UID, RSSI) |
+| 201 | SR_IBEACON_EVENT | BLE iBeacon (UUID, Major, Minor, RSSI, TxPower) |
+| 202 | SR_CELL_INFO | LBS-ячейка (MCC, MNC, LAC, CellID, RAT) |
+| 203 | SR_WIFI_AP_DATA | Wi-Fi точка (BSSID, SSID, RSSI, канал) |
 
 ---
 
 ## Python API
 
 ```python
-from egts import parse_hex, encode_packet
+from egts import parse_hex
 
-# Разобрать пакет
-rows, err = parse_hex("01 00 00 0B ...")
+rows, err = parse_hex("01 00 00 0B 00 03 00 89 00 00 4A 15 38 00 33 E8")
 for r in rows:
-    print(r.layer, r.field, r.offset, r.size, r.hex_val, r.decoded)
+    print(f"{r.layer:20s} {r.field:12s} {r.decoded}")
+```
 
-# Получить CSV через CLI
+```
+PACKET               PRV          1
+PACKET               FDL          3
+PACKET               PID          0
+...
+```
+
+Запуск из командной строки (используется макросом VBA):
+
+```bash
 python egts_cli.py packet.txt output.csv
 ```
 
-Каждый `FieldRow` содержит:
+Поля объекта `FieldRow`:
 
-| Поле | Тип | Описание |
-|------|-----|---------|
-| `layer` | str | `"PACKET"`, `"SDR[0]"`, `"SDR[0] SR_POS_DATA"`, … |
-| `field` | str | Имя поля: `NTM`, `LAT`, `SPD`, … |
-| `offset` | int | Смещение в байтах от начала пакета |
-| `size` | int | Размер в байтах |
-| `hex_val` | str | Hex-представление: `"4F 5F E5 10"` |
-| `raw` | Any | Сырое числовое значение |
-| `decoded` | str | Расшифровка: `"2018-12-25 20:59:59 UTC"` |
-| `editable` | bool | `True` — поле можно редактировать для пересборки |
+| Поле | Описание |
+|------|----------|
+| `layer` | Уровень: `PACKET`, `SDR[0]`, `SDR[0] SR_POS_DATA`, … |
+| `field` | Имя поля: `NTM`, `LAT`, `SPD`, … |
+| `offset` | Смещение в байтах от начала пакета |
+| `size` | Размер в байтах |
+| `hex_val` | Hex-представление: `"4F 5F E5 10"` |
+| `raw` | Числовое значение |
+| `decoded` | Расшифровка: `"2018-12-25 20:59:59 UTC"` |
+| `editable` | `True` — поле доступно для редактирования |
+
+---
+
+## Справка по кодированию полей EGTS
+
+| Поле | Формула |
+|------|---------|
+| Время (NTM, TM) | секунды с 2010-01-01 00:00:00 UTC, uint32 LE |
+| Широта (LAT) | `uint32 = градусы / 90 × 0xFFFFFFFF` |
+| Долгота (LONG) | `uint32 = градусы / 180 × 0xFFFFFFFF` |
+| Скорость (SPD) | биты 13:0 × 0.1 км/ч; бит 15 = DIRH, бит 14 = ALTS |
+| Пробег (ODM) | 24-bit LE uint, км |
+| CRC-8 заголовка | полином `0x31`, начальное значение `0xFF` |
+| CRC-16 тела | полином `0x1021`, начальное значение `0xFFFF` |
 
 ---
 
@@ -103,57 +122,14 @@ python egts_cli.py packet.txt output.csv
 ┌─────────────────────────── PACKET ──────────────────────────────┐
 │ PRV SKID FLAGS HL HE FDL PID PT [PRA RCA TTL] HCS               │
 │                                                                  │
-│  ┌──────────────── SFRD (ServiceDataSet) ────────────────────┐  │
+│  ┌────────────────────── SFRD (тело пакета) ─────────────────┐  │
 │  │  ┌──── SDR[0] ────────────────────────────────────────┐   │  │
 │  │  │ RL RN FLAGS [OID] [EVID] [TM] SST RST              │   │  │
-│  │  │  ┌─ RecordData ─────────────────────────────────┐  │   │  │
-│  │  │  │ SRT SRL │ SR_POS_DATA / SR_EXT_POS / ...    │  │   │  │
-│  │  │  └──────────────────────────────────────────────┘  │   │  │
+│  │  │  ┌── Подзапись ────────────────────────────────┐   │   │  │
+│  │  │  │ SRT SRL │ данные (SR_POS_DATA / SR_EXT / …) │   │   │  │
+│  │  │  └─────────────────────────────────────────────┘   │   │  │
 │  │  └────────────────────────────────────────────────────┘   │  │
-│  │  ┌──── SDR[1] ──────────────────────────────────────┐     │  │
-│  │  │ ...                                              │     │  │
-│  │  └──────────────────────────────────────────────────┘     │  │
 │  └───────────────────────────────────────────────────────────┘  │
 │ SFRCS                                                            │
 └──────────────────────────────────────────────────────────────────┘
 ```
-
-### Типы подзаписей (реализованы)
-
-| Код | Имя | Ключевые поля |
-|-----|-----|---------------|
-| 0  | SR_RECORD_RESPONSE  | CRN, RST |
-| 1  | SR_TERM_IDENTITY    | TID, флаги, HDID / IMEI / IMSI |
-| 9  | SR_RESULT_CODE      | RCD |
-| 16 | SR_POS_DATA         | NTM, LAT, LONG, FLAGS, SPD, DIR, ODM, DIN, SRC, ALT |
-| 17 | SR_EXT_POS_DATA     | VDOP, HDOP, PDOP, SAT, NS |
-| 18 | SR_AD_SENSORS_DATA  | DIOE, DOUT, ASFE, ADIO×8, ANS×8 |
-| 19 | SR_COUNTERS_DATA    | CFE, CN×8 (3-byte LE) |
-| 20/21 | SR_STATE_DATA   | ST, MPSV, BBV, IBV, FLAGS |
-| 24 | SR_ABS_AN_SENS_DATA | ASN, ASV |
-| 25 | SR_ABS_CNTR_DATA    | CN, CNV |
-| 27 | SR_LIQUID_LEVEL     | FLAGS, LLS |
-| 5  | SR_DISPATCHER_IDENTITY | DT, DID |
-
-### Кодирование значений
-
-| Поле | Формула |
-|------|---------|
-| Время (NTM, TM) | секунды с 2010-01-01 00:00:00 UTC, uint32 LE |
-| Широта (LAT) | `uint32 = degrees / 90 × 0xFFFFFFFF` |
-| Долгота (LONG) | `uint32 = degrees / 180 × 0xFFFFFFFF` |
-| Скорость (SPD) | биты 13:0 × 0.1 км/ч; бит15 = DIRH, бит14 = ALTS |
-| Пробег (ODM) | 24-bit LE uint, км |
-| CRC-8 заголовка | полином `0x31`, начальное `0xFF` |
-| CRC-16 тела | полином `0x1021`, начальное `0xFFFF` |
-
----
-
-## Дополнительные секции (в разработке)
-
-Спецификации лежат в `docs/`:
-
-- **iBeacon** — `TZ_EGTS_iBeacon_extended_additive_v17.docx`
-- **RTLS** — `TZ_EGTS_RTLS_v2.docx`
-- **EGTS_PLUS** (тип 15) — protobuf-схема в reference-парсере: `egts_sr_egtsplus_data.proto`
-
