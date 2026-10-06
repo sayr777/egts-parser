@@ -150,8 +150,3 @@ python egts_cli.py packet.txt output.csv
 - **RTLS** — `TZ_EGTS_RTLS_v2.docx`
 - **EGTS_PLUS** (тип 15) — protobuf-схема в reference-парсере: `egts_sr_egtsplus_data.proto`
 
----
-
-## Референсный парсер (Go)
-
-`C:\Users\sayr\Yandex.Disk\EGTS\egts-protocol` — оригинальная Go-реализация протокола от [kuznetsovin/egts-protocol](https://github.com/kuznetsovin/egts-protocol), на основе которой написан этот парсер.
