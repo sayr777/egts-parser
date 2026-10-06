@@ -47,9 +47,11 @@ python excel/create_workbook.py
 ### 3. Настройка Excel
 
 1. Открыть `EGTS_Analyzer.xlsx`
-2. Сохранить как **`.xlsm`** (с поддержкой макросов)
-3. `Alt-F11` → File → Import File → выбрать `EGTSAnalyzer.bas`
-4. Сохранить
+2. Сохранить как **`.xlsm`** (Файл → Сохранить как → тип «Книга Excel с поддержкой макросов»)
+3. Открыть редактор VBA: **Alt+F11**
+4. В панели **Project Explorer** (слева) найти строку с именем книги, щёлкнуть по ней **правой кнопкой мыши** → **Import File...** → выбрать `EGTSAnalyzer.bas`
+   > Если панель Project Explorer не видна — включить её через **View → Project Explorer** (Ctrl+R)
+5. Закрыть редактор VBA и сохранить книгу (**Ctrl+S**)
 
 ### 4. Использование
 
